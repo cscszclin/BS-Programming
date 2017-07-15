@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<title>新闻聚合网站</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="css/templatemo_style.css" rel="stylesheet" type="text/css" />
+<link href="css/bootstrap.css" type="text/css" rel="stylesheet" media="all">
+<script>
+
+function init() {
+    var msg = GetQueryString("message");
+    if(msg !=null && msg.toString().length > 0) {
+        document.getElementById("message").innerHTML = msg;
+    }
+    var msg = GetQueryString("id");
+    if(msg !=null && msg.toString().length > 0) {
+        document.getElementById("User_id").value = msg;
+    }
+    var msg = GetQueryString("email");
+    if(msg !=null && msg.toString().length > 0) {
+        document.getElementById("User_email").value = msg;
+    }
+}
+
+function GetQueryString(name) {
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r != null) {
+        
+        return unescape(r[2]);
+    } 
+    return null;
+    alert (document.getElementById(location.message));
+}
+
+function createNewFormElement(inputForm, elementName, elementValue) {
+    var newElement = document.createElement("input");
+    newElement.setAttribute("name",elementName);
+    newElement.setAttribute("type","hidden");
+    newElement.setAttribute("value",elementValue);
+    inputForm.appendChild(newElement);
+    return newElement;
+}
+function submitForm() {
+    var registerForm = document.createElement("form");  
+    registerForm.id = "registerForm";  
+    registerForm.name = "registerForm";  
+  
+    document.body.appendChild(registerForm);  
+  
+    createNewFormElement(registerForm, "User_id", document.getElementById("User_id").value);
+    createNewFormElement(registerForm, "User_pass", document.getElementById("User_pass").value);
+    createNewFormElement(registerForm, "User_email", document.getElementById("User_email").value);
+  
+    registerForm.method = "POST";  
+    registerForm.action = "insertUser.php";  
+    registerForm.submit();  
+    document.body.removeChild(registerForm);  
+}
+
+function checkForm() {
+    var flag = 1;
+    if (document.getElementById("User_id").value.length <= 6) {
+        document.getElementById("User_id_info").innerHTML = "用户名长度小于6个字符！";
+        flag = 0;
+    }
+    else {
+        document.getElementById("User_id_info").innerHTML = "";
+    }
+    if (document.getElementById("User_pass").value != document.getElementById("User_pass_again").value) {
+        document.getElementById("User_pass_info").innerHTML = "两次输入的密码不一致！";
+        flag = 0;
+    }
+    else {
+        if (document.getElementById("User_pass").value.length <= 6) {
+            document.getElementById("User_pass_info").innerHTML = "密码长度小于6个字符！";
+            flag = 0;
+        }
+        else {
+            document.getElementById("User_pass_info").innerHTML = "";
+        }
+    }
+    if (flag == 1) {
+        submitForm();
+    }
+}
+</script>
+</head>
+<body onload="init()">
+<div id="templatemo_body_wrapper">
+<div id="templatemo_wrapper">
+    <div id="templatemo_header">
+        <div id="site_title">
+            <a href="index.html">新闻
+            	<span>聚合网站</span>
+            </a>
+        </div> 
+        <div id="search_box">
+            <form action="#" method="get">
+                <input type="text" value="输入关键字..." name="q" size="10" id="searchfield" title="searchfield" onfocus="clearText(this)" onblur="clearText(this)" />
+              <input type="submit" name="Search" value="搜索" id="searchbutton" title="Search" />
+            </form>
+        </div>
+        <div class="cleaner"></div>
+    </div> 
+    <div id="templatemo_menu">  	
+        <div id="register_box">
+        	已经注册? 点击 <a href="login.html" class="signup">这里</a> | <a href="register.html" class="new_reg">注册</a>
+        </div>
+    </div> 
+    <div id="templatemo_main">
+        <div id="templatemo_content">
+            <div class="post_box">
+                
+                    <div class="form-group">
+                        <label for="User_id">用户名</label>
+                        <input type="text" class="form-control" id="User_id">
+                        <label id="User_id_info"></label>
+                    </div>
+                    <div class="form-group">
+                        <label for="User_pass">密码</label>
+                        <input type="password" class="form-control" id="User_pass">
+                        <label id="User_pass_info"></label>
+                    </div>
+                    <div class="form-group">
+                        <label for="User_pass_again">重复密码</label>
+                        <input type="password" class="form-control" id="User_pass_again">
+                    </div>
+                    <div class="form-group">
+                        <label for="User_email">邮箱</label>
+                        <input type="email" class="form-control" id="User_email">
+                    </div>
+                    <button class="btn btn-default" onclick="checkForm()">注册</button>
+                    <label id="message"></label>
+            </div> 
+        </div>
+    	<div class="cleaner"></div>
+    </div>
+</div>
+<div class="cleaner"></div>
+</div>
+
+<div id="templatemo_footer_wrapper">
+	<div id="templatemo_footer">
+    	<div class="footer_box col_w300">
+        	<h4>友情链接</h4>
+            <ul class="footer_menu">
+            	<li><a href="http://news.sina.com.cn/">新浪新闻</a></li>
+                <li><a href="http://news.qq.com/">腾讯新闻</a></li>
+                <li><a href="http://news.163.com/">网易新闻</a></li>
+                <li><a href="http://www.toutiao.com/">今日头条</a></li>
+            </ul>     
+        </div>     
+        <div class="footer_box col_w160">
+        	<h4>参考资料</h4>
+            <ul class="footer_menu">
+            	<li><a href="http://www.w3school.com.cn/">W3school在线教程</a></li>
+                <li><a href="https://www.juhe.cn/">聚合数据</a></li>
+                <li><a href="#">Web Design</a></li>
+                <li><a href="#">CSS Templates</a></li>
+                <li><a href="#">Flash Web Gallery</a></li>
+            </ul>     
+        </div>
+        <div class="footer_box col_w260 fb_last">
+        	<h4>分类</h4>
+            	<a href="#" style="font-size:12px">头条</a> <a href="#" style="font-size:11px">社会</a> <a href="#" style="font-size:16px">国内</a> <a href="#" style="font-size:11px">国际</a> <a href="#" style="font-size:20px">娱乐</a> <a href="#" style="font-size:16px">体育</a> <a href="#" style="font-size:12px">军事</a> <a href="#" style="font-size:28px">财经</a> <a href="#" style="font-size:14px">科技</a> <a href="#" style="font-size:12px">时尚</a> <a href="#" style="font-size:14px">全部</a> <a href="#" style="font-size:12px">新闻聚合网站</a>
+        </div>
+    	<div class="cleaner"></div>
+    </div>
+</div>
+
+<div id="templatemo_copyright">
+    Copyright © 2017 <a>ZHENCHAO LIN@ZJU</a>  
+</div>
+</body>
+</html>

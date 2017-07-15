@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新闻聚合网站</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="css/templatemo_style.css" rel="stylesheet" type="text/css" />
+<link href="css/bootstrap.css" type="text/css" rel="stylesheet" media="all">
+<script>
+function backHomepage() {
+    window.location.href = 'index.html';
+}
+
+function init() {
+    var msg = GetQueryString("message");
+    if(msg != null && msg.toString().length > 0) {
+        document.getElementById("message").innerHTML = msg;
+        
+    }
+    setTimeout("backHomepage()", 3000);
+}
+
+function GetQueryString(name) {
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r != null) {
+        return unescape(r[2]);
+    } 
+    return null;
+}
+</script>
+</head>
+<body onload="init()">
+<div id="templatemo_body_wrapper">
+<div id="templatemo_wrapper">
+    <div id="templatemo_header">
+        <div id="site_title">
+            <a href="index.html">新闻
+            	<span>聚合网站</span>
+            </a>
+        </div> 
+        <div id="search_box">
+            <form action="#" method="get">
+                <input type="text" value="输入关键字..." name="q" size="10" id="searchfield" title="searchfield" onfocus="clearText(this)" onblur="clearText(this)" />
+              <input type="submit" name="Search" value="搜索" id="searchbutton" title="Search" />
+            </form>
+        </div>
+        <div class="cleaner"></div>
+    </div> 
+    <div id="templatemo_menu">  	
+        <div id="register_box">
+        	已经注册? 点击 <a href="login.html" class="signup">这里</a> | <a href="register.html" class="new_reg">注册</a>
+        </div>
+    </div> 
+    <div id="templatemo_main">
+        <div id="templatemo_content">
+            <div class="post_box">
+                <label id="message"></label>
+                <label>三秒钟后调回首页</label>    
+            </div> 
+        </div>
+    	<div class="cleaner"></div>
+    </div>
+</div>
+<div class="cleaner"></div>
+</div>
+
+<div id="templatemo_footer_wrapper">
+	<div id="templatemo_footer">
+    	<div class="footer_box col_w300">
+        	<h4>友情链接</h4>
+            <ul class="footer_menu">
+            	<li><a href="http://news.sina.com.cn/">新浪新闻</a></li>
+                <li><a href="http://news.qq.com/">腾讯新闻</a></li>
+                <li><a href="http://news.163.com/">网易新闻</a></li>
+                <li><a href="http://www.toutiao.com/">今日头条</a></li>
+            </ul>     
+        </div>     
+        <div class="footer_box col_w160">
+        	<h4>参考资料</h4>
+            <ul class="footer_menu">
+            	<li><a href="http://www.w3school.com.cn/">W3school在线教程</a></li>
+                <li><a href="https://www.juhe.cn/">聚合数据</a></li>
+                <li><a href="#">Web Design</a></li>
+                <li><a href="#">CSS Templates</a></li>
+                <li><a href="#">Flash Web Gallery</a></li>
+            </ul>     
+        </div>
+        <div class="footer_box col_w260 fb_last">
+        	<h4>分类</h4>
+            	<a href="#" style="font-size:12px">头条</a> <a href="#" style="font-size:11px">社会</a> <a href="#" style="font-size:16px">国内</a> <a href="#" style="font-size:11px">国际</a> <a href="#" style="font-size:20px">娱乐</a> <a href="#" style="font-size:16px">体育</a> <a href="#" style="font-size:12px">军事</a> <a href="#" style="font-size:28px">财经</a> <a href="#" style="font-size:14px">科技</a> <a href="#" style="font-size:12px">时尚</a> <a href="#" style="font-size:14px">全部</a> <a href="#" style="font-size:12px">新闻聚合网站</a>
+        </div>
+    	<div class="cleaner"></div>
+    </div>
+</div>
+
+<div id="templatemo_copyright">
+    Copyright © 2017 <a>ZHENCHAO LIN@ZJU</a>  
+</div>
+</body>
+</html>

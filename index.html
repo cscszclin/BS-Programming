@@ -1,0 +1,436 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新闻聚合网站</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="css/templatemo_style.css" rel="stylesheet" type="text/css" />
+<script language="javascript" type="text/javascript">
+
+function clearCookie() {
+    setCookie('username', '', 365);
+    location.reload();
+}
+
+function getCookie(c_name) {
+    if (document.cookie.length>0) {
+        c_start=document.cookie.indexOf(c_name + "=")
+        if (c_start!=-1) { 
+            c_start=c_start + c_name.length+1 
+            c_end=document.cookie.indexOf(";",c_start)
+            if (c_end==-1) 
+                c_end=document.cookie.length
+                return unescape(document.cookie.substring(c_start,c_end))
+            } 
+        }
+        return ""
+}
+
+function setCookie(c_name,value,expiredays) {
+    var exdate=new Date()
+    exdate.setDate(exdate.getDate()+expiredays)
+    document.cookie=c_name+ "=" +escape(value)+((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+}
+
+function checkCookie() {
+    username=getCookie('username')
+    if (username!=null && username!="") {
+        alert('Welcome again '+username+'!'); 
+        setCookie('username','',365);
+    }
+    else {
+        username=prompt('Please enter your name:',"")
+        if (username!=null && username!="") {
+            setCookie('username',username,365)
+        }
+    }
+}
+ 
+function init() {
+    var newsTypes = new Array("top", "social", "domestic", "international", "entertainment", "sport", "millitary", "technology", "finance", "fashion");
+    
+    for (var i = 0; i < 10; i++) {
+        var table = document.getElementById(newsTypes[i] + "Rating");
+        var tds = table.getElementsByTagName("td");
+        for (var j = 1; j < tds.length; j++) {
+        tds[j].onmouseover = change;
+        tds[j].style.cursor = "pointer";
+        }
+    }
+    
+}
+
+function indexOf(arr, element) {
+    var j = 0;
+    for (var i = 1; i < arr.length; i++) {
+        if (arr[i]==element) {
+            j = i;
+            break;
+        }
+    }
+    return j;
+}
+
+function change() {
+    var newsTypes = new Array("top", "social", "domestic", "international", "entertainment", "sport", "millitary", "technology", "finance", "fashion");
+    var table = document.getElementById("topRating");
+    var tds = table.getElementsByTagName("td");
+    var n = indexOf(tds, this);
+    for (var j = 0; j < 10; j++) {
+        table = document.getElementById(newsTypes[j] + "Rating");
+
+        tds = table.getElementsByTagName("td");
+        n = indexOf(tds, this);
+        if (n == 0) {
+            continue;
+        }
+        for (var i = 2; i <= n; i++) {
+            tds[i].innerText = "★";
+        }
+        for (var i = n + 1; i < tds.length; i++) {
+            tds[i].innerText = "☆";
+        }
+    }
+    
+}
+
+function createNewFormElement(inputForm, elementName, elementValue) {
+    var newElement = document.createElement("input");
+    newElement.setAttribute("name",elementName);
+    newElement.setAttribute("type","hidden");
+    newElement.setAttribute("value",elementValue);
+    inputForm.appendChild(newElement);
+    return newElement;
+}
+
+function resetRating() {
+
+    var newsTypes = new Array("top", "social", "domestic", "international", "entertainment", "sport", "millitary", "technology", "finance", "fashion");
+    var ratingForm = document.createElement("form");  
+    ratingForm.id = "ratingForm";  
+    ratingForm.name = "ratingForm";  
+  
+    document.body.appendChild(ratingForm);  
+  
+    
+    var result = new Array (10);
+
+    for (var i = 0; i < 10; i++) {
+        var table = document.getElementById(newsTypes[i] + "Rating");
+        var tds = table.getElementsByTagName("td");
+        var j;
+        for (j = 2; j <= 6; j++) {
+            if (tds[j].innerText == "☆")
+                break;
+        }
+        result[i] = (j - 2) * 30;
+    }
+    createNewFormElement(ratingForm, "operation", "reset");
+    createNewFormElement(ratingForm, "top", result[0]);
+    createNewFormElement(ratingForm, "social", result[1]);
+    createNewFormElement(ratingForm, "domestic", result[2]);
+    createNewFormElement(ratingForm, "international", result[3]);
+    createNewFormElement(ratingForm, "entertainment", result[4]);
+    createNewFormElement(ratingForm, "sport", result[5]);
+    createNewFormElement(ratingForm, "millitary", result[6]);
+    createNewFormElement(ratingForm, "technology", result[7]);
+    createNewFormElement(ratingForm, "finance", result[8]);
+    createNewFormElement(ratingForm, "fashion", result[9]);
+    createNewFormElement(ratingForm, "username", getCookie('username'));
+  
+    ratingForm.method = "POST";  
+    ratingForm.action = "updateUser.php";  
+    ratingForm.submit();  
+    document.body.removeChild(ratingForm);  
+
+}
+
+function readRating () {
+    var ratinghttp;
+    if (window.XMLHttpRequest) {    // code for IE7+, Firefox, Chrome, Opera, Safari
+        ratinghttp=new XMLHttpRequest();
+    }
+    else {                          // code for IE6, IE5
+        ratinghttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    ratinghttp.onreadystatechange=function() {
+        if (ratinghttp.readyState==4 && ratinghttp.status==200) {
+            ratingDoc=ratinghttp.responseText;   
+            document.getElementById("introduction").innerHTML=ratingDoc;
+        }
+    }
+    xmlhttp.open("POST","readRating.php");
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xmlhttp.send("username=" + getCookie('username'));   
+}
+
+function modifyRating (category, url) {
+
+    var ratingForm = document.createElement("form");  
+    ratingForm.id = "ratingForm";  
+    ratingForm.name = "ratingForm";  
+
+    document.body.appendChild(ratingForm); 
+    switch (category) {
+        case "头条":
+            createNewFormElement(ratingForm, "engType", "top");
+            break;  
+        case "社会":
+            createNewFormElement(ratingForm, "engType", "social");
+            break;  
+        case "国内":
+            createNewFormElement(ratingForm, "engType", "domestic");
+            break;  
+        case "国际":
+            createNewFormElement(ratingForm, "engType", "international");
+            break;  
+        case "娱乐":
+            createNewFormElement(ratingForm, "engType", "entertainment");
+            break;  
+        case "体育":
+            createNewFormElement(ratingForm, "engType", "sport");
+            break;  
+        case "军事":
+            createNewFormElement(ratingForm, "engType", "millitary");
+            break;  
+        case "科技":
+            createNewFormElement(ratingForm, "engType", "technology");
+            break; 
+        case "财经":
+            createNewFormElement(ratingForm, "engType", "finance");
+            break;
+        case "时尚":
+            createNewFormElement(ratingForm, "engType", "fashion");
+            break; 
+        default:
+            break;
+    } 
+    
+    createNewFormElement(ratingForm, "operation", "modify");
+    createNewFormElement(ratingForm, "type", category);
+    createNewFormElement(ratingForm, "url", url);
+    createNewFormElement(ratingForm, "username", getCookie('username'));
+  
+    ratingForm.method = "POST";  
+    ratingForm.action = "updateUser.php";  
+    ratingForm.submit();  
+    document.body.removeChild(ratingForm);
+}
+</script>
+</head>
+<body onload = "init()">
+<div id="templatemo_body_wrapper">
+<div id="templatemo_wrapper">
+    <div id="templatemo_header">
+        <div id="site_title">
+            <a href="index.html">新闻
+            	<span>聚合网站</span>
+            </a>
+        </div> 
+        <div id="search_box">
+            <form action="#" method="get">
+                <input type="text" value="输入关键字..." name="q" size="10" id="searchfield" title="searchfield" onfocus="clearText(this)" onblur="clearText(this)" />
+              <input type="submit" name="Search" value="搜索" id="searchbutton" title="Search" />
+            </form>
+        </div>
+        <div class="cleaner"></div>
+    </div> 
+    <div id="templatemo_menu">
+        <ul>
+            <li><a href="#" class="current"><span></span>主界面</a></li>
+        </ul>    	
+        <div id="register_box">
+        	已经注册? 点击 <a href="login.html" class="signup">这里</a> | <a href="register.html" class="new_reg">注册</a>
+        </div>
+    </div> 
+    <div id="templatemo_main">
+        <div id="templatemo_content">
+            <div id = "NewsContent" class = "postbox">新闻读取中...</div>
+                <script>
+                    var xmlhttp;
+                    if (window.XMLHttpRequest) {    // code for IE7+, Firefox, Chrome, Opera, Safari
+                        xmlhttp=new XMLHttpRequest();
+                    }
+                    else {                          // code for IE6, IE5
+                      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                    xmlhttp.onreadystatechange=function() {
+                        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                            xmlDoc=xmlhttp.responseText;   
+                            document.getElementById("NewsContent").innerHTML=xmlDoc;
+                        }
+                    }
+                    xmlhttp.open("POST","selectNews.php");
+                    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                    xmlhttp.send("username=" + getCookie('username') + "&type=");   
+                </script>
+            </div>
+        
+        <div id="templatemo_sidebar">
+        
+        	<div id="aboutus">
+            	<h3>个人信息</h3>
+                <p id = "introduction">你的自我介绍。 <a href="#" class="continue">查看更多...</a></p>
+                <script>
+                    //document.getElementById("introduction").innerHTML = "run this code!";
+                    username=getCookie('username');
+                    var rating = "";
+                    if (username == null || username == '') {
+                        document.getElementById("introduction").innerHTML = "当前尚未登录！";
+                    }
+                    else {
+                        document.getElementById("introduction").innerHTML = "欢迎回来，" + username + "！<br><br>" 
+                        + "<table id=\"topRating\">" + "<tr><td></td><td>头条 : </td><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>" + "</table>"
+                        + "<table id=\"socialRating\">" + "<tr><td></td><td>社会 : </td><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>" + "</table>"
+                        + "<table id=\"domesticRating\">" + "<tr><td></td><td>国内 : </td><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>" + "</table>"
+                        + "<table id=\"internationalRating\">" + "<tr><td></td><td>国际 : </td><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>" + "</table>"
+                        + "<table id=\"entertainmentRating\">" + "<tr><td></td><td>娱乐 : </td><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>" + "</table>"
+                        + "<table id=\"sportRating\">" + "<tr><td></td><td>体育 : </td><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>" + "</table>"
+                        + "<table id=\"millitaryRating\">" + "<tr><td></td><td>军事 : </td><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>" + "</table>"
+                        + "<table id=\"technologyRating\">" + "<tr><td></td><td>科技 : </td><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>" + "</table>"
+                        + "<table id=\"financeRating\">" + "<tr><td></td><td>财经 : </td><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>" + "</table>"
+                        + "<table id=\"fashionRating\">" + "<tr><td></td><td>时尚 : </td><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>" + "</table>"
+                        + "<br><button type = \"button\" onclick = \"resetRating()\">点击提交</button>";
+
+                        document.getElementById("register_box").innerHTML = "已登录 | <a href = \"JavaScript:clearCookie()\">退出</a>"
+                    } 
+                </script>
+            </div>
+            
+            <div class="cleaner_h20"></div>
+            
+            <div class="sidebar_box">
+            	<h3>新闻分类</h3>
+                <script>
+                    function topNews () {
+                        xmlhttp.open("POST","selectNews.php");
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        xmlhttp.send("type=头条");   
+                    }
+
+                    function socialNews () {
+                        xmlhttp.open("POST","selectNews.php");
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        xmlhttp.send("type=社会");   
+                    }
+
+                    function domesticNews () {
+                        xmlhttp.open("POST","selectNews.php");
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        xmlhttp.send("type=国内");   
+                    }
+
+                    function internationalNews () {
+                        xmlhttp.open("POST","selectNews.php");
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        xmlhttp.send("type=国际");   
+                    }
+
+                    function entertainmentNews () {
+                        xmlhttp.open("POST","selectNews.php");
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        xmlhttp.send("type=娱乐");   
+                    }
+
+                    function sportNews () {
+                        xmlhttp.open("POST","selectNews.php");
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        xmlhttp.send("type=体育");   
+                    }
+
+                    function millitaryNews () {
+                        xmlhttp.open("POST","selectNews.php");
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        xmlhttp.send("type=军事");   
+                    }
+
+                    function technologyNews () {
+                        xmlhttp.open("POST","selectNews.php");
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        xmlhttp.send("type=科技");   
+                    }
+
+                    function financeNews () {
+                        xmlhttp.open("POST","selectNews.php");
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        xmlhttp.send("type=财经");   
+                    }
+
+                    function fashionNews () {
+                        xmlhttp.open("POST","selectNews.php");
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        xmlhttp.send("type=时尚");   
+                    }
+
+                    function allNews () {
+                        xmlhttp.open("POST","selectNews.php");
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        xmlhttp.send("type=");   
+                    }
+                </script>
+                <ul class="sidebar_menu">
+                    <li><a href="JavaScript:topNews();">&raquo; 头条</a></li>
+                    <li><a href="JavaScript:socialNews()">&raquo; 社会</a></li>
+                    <li><a href="JavaScript:domesticNews()">&raquo; 国内</a></li>
+                  	<li><a href="JavaScript:internationalNews()">&raquo; 国际</a></li>
+                    <li><a href="JavaScript:entertainmentNews()">&raquo; 娱乐</a></li>
+                    <li><a href="JavaScript:sportNews()">&raquo; 体育</a></li>
+                    <li><a href="JavaScript:millitaryNews()">&raquo; 军事</a></li>
+                    <li><a href="JavaScript:technologyNews()">&raquo; 科技</a></li>
+                    <li><a href="JavaScript:financeNews()">&raquo; 财经</a></li>
+                    <li><a href="JavaScript:fashionNews()">&raquo; 时尚</a></li>
+                    <li><a href="JavaScript:allNews()">&raquo; 全部</a></li>
+       		    </ul>
+            </div>
+          	<div class="sidebar_box">
+            	<h3>订阅新闻</h3>
+                <form method="get" action="#">
+                  	<input type="text" id="user" name="user" class="newsletter_email" value="输入您的邮箱地址"  onfocus="clearText(this)" onblur="clearText(this)" />
+                    <input style="font-weight: bold;" type="submit" name="submit" id="" value="确认订阅" />
+                </form>
+            	<div class="cleaner_h20"></div>         
+            </div>
+        </div>
+    	<div class="cleaner"></div>
+    </div>
+</div>
+<div class="cleaner"></div>
+</div>
+
+<div id="templatemo_footer_wrapper">
+	<div id="templatemo_footer">
+    	<div class="footer_box col_w300">
+        	<h4>友情链接</h4>
+            <ul class="footer_menu">
+            	<li><a href="http://news.sina.com.cn/">新浪新闻</a></li>
+                <li><a href="http://news.qq.com/">腾讯新闻</a></li>
+                <li><a href="http://news.163.com/">网易新闻</a></li>
+                <li><a href="http://www.toutiao.com/">今日头条</a></li>
+            </ul>     
+        </div>     
+        <div class="footer_box col_w160">
+        	<h4>参考资料</h4>
+            <ul class="footer_menu">
+            	<li><a href="http://www.w3school.com.cn/">W3school在线教程</a></li>
+                <li><a href="https://www.juhe.cn/">聚合数据</a></li>
+                <li><a href="#">Web Design</a></li>
+                <li><a href="#">CSS Templates</a></li>
+                <li><a href="#">Flash Web Gallery</a></li>
+            </ul>     
+        </div>
+        <div class="footer_box col_w260 fb_last">
+        	<h4>分类</h4>
+            	<a href="#" style="font-size:12px">头条</a> <a href="#" style="font-size:11px">社会</a> <a href="#" style="font-size:16px">国内</a> <a href="#" style="font-size:11px">国际</a> <a href="#" style="font-size:20px">娱乐</a> <a href="#" style="font-size:16px">体育</a> <a href="#" style="font-size:12px">军事</a> <a href="#" style="font-size:28px">财经</a> <a href="#" style="font-size:14px">科技</a> <a href="#" style="font-size:12px">时尚</a> <a href="#" style="font-size:14px">全部</a> <a href="#" style="font-size:12px">新闻聚合网站</a>
+        </div>
+    	<div class="cleaner"></div>
+    </div>
+</div>
+
+<div id="templatemo_copyright">
+    Copyright © 2017 <a>ZHENCHAO LIN@ZJU</a>  
+</div>
+</body>
+</html>

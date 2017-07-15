@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script>
+function loadXMLDoc() {
+  var xmlhttp;
+  var con;
+  
+  if (window.XMLHttpRequest) {    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  }
+  else {                          // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+
+  if (window.XMLHttpRequest) {    // code for IE7+, Firefox, Chrome, Opera, Safari
+    con=new XMLHttpRequest();
+  }
+  else {                          // code for IE6, IE5
+    con=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+      var obj = JSON.parse(xmlhttp.responseText);
+      for (var i = 0; i < obj.result.data.length; i++) {
+        con.open("POST","insertNews.php",false);
+        con.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        con.send("_key="+obj.result.data[i].uniquekey+"&title="+obj.result.data[i].title+"&date="+obj.result.data[i].date+"&category="+obj.result.data[i].category+"&authorName="+obj.result.data[i].author_name+"&url="+obj.result.data[i].url+"&picture="+obj.result.data[i].thumbnail_pic_s);
+
+      }
+    }
+  }
+  xmlhttp.open("GET","http://v.juhe.cn/toutiao/index?type=top&key=09bec79c2ca562f133450e6ad7285a94",false);
+  xmlhttp.send();
+  xmlhttp.open("GET","http://v.juhe.cn/toutiao/index?type=shehui&key=09bec79c2ca562f133450e6ad7285a94",false);
+  xmlhttp.send();
+  xmlhttp.open("GET","http://v.juhe.cn/toutiao/index?type=guonei&key=09bec79c2ca562f133450e6ad7285a94",false);
+  xmlhttp.send();
+  xmlhttp.open("GET","http://v.juhe.cn/toutiao/index?type=guoji&key=09bec79c2ca562f133450e6ad7285a94",false);
+  xmlhttp.send();
+  xmlhttp.open("GET","http://v.juhe.cn/toutiao/index?type=yule&key=09bec79c2ca562f133450e6ad7285a94",false);
+  xmlhttp.send();
+  xmlhttp.open("GET","http://v.juhe.cn/toutiao/index?type=tiyu&key=09bec79c2ca562f133450e6ad7285a94",false);
+  xmlhttp.send();
+  xmlhttp.open("GET","http://v.juhe.cn/toutiao/index?type=junshi&key=09bec79c2ca562f133450e6ad7285a94",false);
+  xmlhttp.send();
+  xmlhttp.open("GET","http://v.juhe.cn/toutiao/index?type=keji&key=09bec79c2ca562f133450e6ad7285a94",false);
+  xmlhttp.send();
+  xmlhttp.open("GET","http://v.juhe.cn/toutiao/index?type=caijing&key=09bec79c2ca562f133450e6ad7285a94",false);
+  xmlhttp.send();
+  xmlhttp.open("GET","http://v.juhe.cn/toutiao/index?type=shishang&key=09bec79c2ca562f133450e6ad7285a94",false);
+  xmlhttp.send();
+
+}
+</script>
+</head>
+<body>
+
+<script>
+loadXMLDoc();
+</script>
+
+</body>
+</html>
